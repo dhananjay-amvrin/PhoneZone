@@ -43,9 +43,8 @@ public class AdminTest extends beforeandafterclassTest {
 		System.out.println(wd.getTitle());
 		
 		String text= wd.findElement(By.xpath(prop.getProperty("common_header_login"))).getText();
-		
 		Assert.assertEquals(text,"Admin Login");
-		Thread.sleep(5000);
+		Thread.sleep(3000);
 	}
 
 }
