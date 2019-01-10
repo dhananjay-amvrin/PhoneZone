@@ -23,13 +23,13 @@ public class browserlistTest {
 		}
 		else if(enterdriver.equals("ff") || enterdriver.equals("firefox"))
 		{
-			System.setProperty("webdriver.gecko.driver", "D:\\Maven_workspace\\phonezone\\geckodriver32.exe");
+			System.setProperty("webdriver.gecko.driver", System.getProperty("user.dir")+"/Driver/mozilladriver/geckodriver32.exe");
 			wd=new FirefoxDriver();
 			wd.manage().deleteAllCookies();
 		}
 		else if(enterdriver.equals("ie") || enterdriver.equals("Internet Explorer"))
 		{
-			System.setProperty("webdriver.ie.driver", "D:\\Maven_workspace\\phonezone\\IEDriverServer32.exe");
+			System.setProperty("webdriver.ie.driver", System.getProperty("user.dir")+"/Driver/IEdriver/IEDriverServer32.exe");
 			wd=new InternetExplorerDriver();
 			wd.manage().deleteAllCookies();
 		}

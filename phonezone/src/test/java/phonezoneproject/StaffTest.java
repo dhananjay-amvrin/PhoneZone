@@ -15,7 +15,7 @@ public class StaffTest extends beforeandafterclassTest {
 	
 	static {
         try {
-        	fis=new FileInputStream("D:\\Maven_workspace\\phonezone\\properties\\locators.properties");
+        	fis=new FileInputStream(System.getProperty("user.dir")+"/properties/locators.properties");
         	
         } catch (FileNotFoundException e) {
         	
