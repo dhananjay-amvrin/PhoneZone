@@ -1,0 +1,16 @@
+-------------------------------------------------------------------------------
+Test set: TestSuite
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 3, Errors: 0, Skipped: 0, Time elapsed: 30.231 sec <<< FAILURE!
+admin_button_test(phonezoneproject.AdminTest)  Time elapsed: 0.065 sec  <<< FAILURE!
+java.lang.NullPointerException
+	at phonezoneproject.AdminTest.admin_button_test(AdminTest.java:27)
+
+staff_button_test(phonezoneproject.StaffTest)  Time elapsed: 0 sec  <<< FAILURE!
+java.lang.NullPointerException
+	at phonezoneproject.StaffTest.staff_button_test(StaffTest.java:22)
+
+wholesaler_button_test(phonezoneproject.WholesalerTest)  Time elapsed: 0 sec  <<< FAILURE!
+java.lang.NullPointerException
+	at phonezoneproject.WholesalerTest.wholesaler_button_test(WholesalerTest.java:23)
+

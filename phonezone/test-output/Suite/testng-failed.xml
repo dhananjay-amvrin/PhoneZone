@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite guice-stage="DEVELOPMENT" name="Failed suite [Suite]">
+  <test thread-count="5" name="Test(failed)">
+    <classes>
+      <class name="phonezoneproject.StaffTest">
+        <methods>
+          <include name="opendriver"/>
+          <include name="staff_button_test"/>
+          <include name="quitedriver"/>
+        </methods>
+      </class> <!-- phonezoneproject.StaffTest -->
+      <class name="phonezoneproject.WholesalerTest">
+        <methods>
+          <include name="opendriver"/>
+          <include name="quitedriver"/>
+          <include name="wholesaler_button_test"/>
+        </methods>
+      </class> <!-- phonezoneproject.WholesalerTest -->
+      <class name="phonezoneproject.AdminTest">
+        <methods>
+          <include name="opendriver"/>
+          <include name="admin_button_test"/>
+          <include name="quitedriver"/>
+        </methods>
+      </class> <!-- phonezoneproject.AdminTest -->
+    </classes>
+  </test> <!-- Test(failed) -->
+</suite> <!-- Failed suite [Suite] -->
