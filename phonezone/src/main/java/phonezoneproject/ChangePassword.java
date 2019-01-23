@@ -15,7 +15,7 @@ public class ChangePassword {
 
 	private WebElement breadcrumbText;
 
-	@FindBy(xpath = "//h3[@class='title1'and contains(text(), 'Change Password')]")
+	@FindBy(xpath = "//h3[@class='title1']")
 
 	private WebElement pageHeaderText;
 
@@ -40,7 +40,7 @@ public class ChangePassword {
 	private WebElement confirmPasswordErrorText;
 	
 	
-	@FindBy(id =".//div[@class='alert alert-success fade in alert-dismissable alert-cust']")
+	@FindBy(xpath =".//div[@class='alert alert-success fade in alert-dismissable alert-cust']")
 	
 	private WebElement successMessage;
 
@@ -70,6 +70,10 @@ public class ChangePassword {
 	public void submit() {
 		submitButton.click();
 	}
+	
+	private String getsuccessMessage() {
+		return successMessage.getText();
+	}
 
 	public String getNewPasswordError() {
 		return newPasswordErrorText.getText();
@@ -86,7 +90,7 @@ public class ChangePassword {
 			this.setConfirmPassword(password);
 			this.submit();
 		if (successMessage.isDisplayed())
-			return this.getConfirmPasswordError();
+			return this.getsuccessMessage();
 		else
 			errorMessages.append(this.getNewPasswordError());
 			errorMessages.append(this.getConfirmPasswordError());		
