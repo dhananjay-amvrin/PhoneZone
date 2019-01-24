@@ -11,9 +11,9 @@ import org.testng.Reporter;
 import org.testng.annotations.Test;
 
 public class UserTest extends beforeandafterclassTest {
-	private String userEmail="User8@datagenius.co.nz";
+	private String userEmail;
 	Random rand = new Random();
-	int randNo = rand.nextInt(1000) - 100;
+	int randNo = rand.nextInt(900) + 100;
 
 	@Test
 	public void AddUserTest() throws InterruptedException {
@@ -49,7 +49,7 @@ public class UserTest extends beforeandafterclassTest {
 		Reporter.log("User with email id: " + userEmail + " added successfully.");
 	}
 
-	@Test
+	@Test (dependsOnMethods={"AddUserTest"})
 	public void EditUserTest() throws InterruptedException {
 		String firstName = "";
 		String lastName = "";
@@ -100,7 +100,7 @@ public class UserTest extends beforeandafterclassTest {
 		Reporter.log("User with email id: " + userEmail + " edited successfully.");
 	}
 
-	@Test
+	@Test (dependsOnMethods={"AddUserTest"})
 	public void changeUserPasswordTest() throws InterruptedException {
 		String password = "Qwerty123";
 
@@ -144,4 +144,39 @@ public class UserTest extends beforeandafterclassTest {
 		assertEquals("Password updated successfully.", changePwd.changePassword(password));
 		Reporter.log("Password for User with email id: " + userEmail + " is now changed to: " + password);
 	}
+	
+	
+	@Test
+	public void AddUserRequiredFieldTest() throws InterruptedException {
+		String firstName = "";
+		String lastName = "";
+		String email = "";
+		String password = "";
+		String phoneNumber = "";
+		String userRole = "";
+		String wholeseller = "";
+		String status = "";
+		String errorMessages;
+		wd.findElement(By.xpath("//a[@class='btn btn-primary btn-lg btn_style btn_style-1']")).click();
+		wd.findElement(By.cssSelector("#email")).sendKeys("dhananjay.singh@datagenius.co.nz");
+		wd.findElement(By.cssSelector("#password")).sendKeys("phonezone@18#$");
+		wd.findElement(By.xpath("//button[@type='submit']")).click();
+
+		Actions actions = new Actions(wd);
+		WebElement menu = wd.findElement(By.xpath("//i[@class='fa fa-user nav_icon']"));
+		actions.moveToElement(menu);
+		actions.click().build().perform();
+		Thread.sleep(2000);
+
+		WebElement subMenu = wd.findElement(By.xpath("//a[contains(text(),'Add User')]"));
+		actions.moveToElement(subMenu);
+		actions.click().build().perform();
+
+		User user = new User(wd);
+		assertEquals("Users Listing Add User", user.verifyBreadcrumb());
+		assertEquals("Add User", user.verifyPageTitle());		
+		errorMessages = user.addUser(firstName, lastName, email, password, phoneNumber, userRole, wholeseller, status);
+		Reporter.log("User required fields tested successfully. Fields in error are : \n" + errorMessages);
+	}
+
 }

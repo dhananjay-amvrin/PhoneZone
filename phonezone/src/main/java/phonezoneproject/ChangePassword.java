@@ -1,8 +1,11 @@
 package phonezoneproject;
 
+import java.util.List;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.PageFactory;
 
 public class ChangePassword {
@@ -37,12 +40,11 @@ public class ChangePassword {
 
 	@FindBy(id = "re_new_password-error")
 
-	private WebElement confirmPasswordErrorText;
+	private WebElement confirmPasswordErrorText;	
 	
-	
-	@FindBy(xpath =".//div[@class='alert alert-success fade in alert-dismissable alert-cust']")
-	
-	private WebElement successMessage;
+	@FindBys(@FindBy(xpath = "//div[@class='alert alert-success fade in alert-dismissable alert-cust']"))
+
+	private List<WebElement> successMessage;
 
 	//page methods
 	
@@ -72,7 +74,7 @@ public class ChangePassword {
 	}
 	
 	private String getsuccessMessage() {
-		return successMessage.getText();
+		return successMessage.get(0).getText();
 	}
 
 	public String getNewPasswordError() {
@@ -89,10 +91,11 @@ public class ChangePassword {
 			this.setNewPassword(password);
 			this.setConfirmPassword(password);
 			this.submit();
-		if (successMessage.isDisplayed())
+		if (successMessage.size()>0 && successMessage != null)
 			return this.getsuccessMessage();
 		else
 			errorMessages.append(this.getNewPasswordError());
+			errorMessages.append(System.getProperty("line.separator"));
 			errorMessages.append(this.getConfirmPasswordError());		
 			return errorMessages.toString();
 	}

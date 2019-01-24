@@ -49,7 +49,7 @@ public class WholesellerTest extends beforeandafterclassTest {
 		Reporter.log("Wholeseller with name: " + wholesellerId + " added successfully.");
 	}
 
-	@Test
+	@Test (dependsOnMethods={"AddWholesellerTest"})
 	public void editWholesellerTest() throws InterruptedException {
 		String wholesellerName = "";
 		String address = "121 West End";
@@ -102,5 +102,39 @@ public class WholesellerTest extends beforeandafterclassTest {
 		assertEquals("Wholeseller updated successfully.",
 				wholeseller.editWholeseller(wholesellerName, address, city, state, country, pinCode, status));
 		Reporter.log("Wholeseller with name: " + wholesellerId + " updated successfully.");
+	}
+	
+	
+	@Test
+	public void AddWholesellerRequiredFieldTest() throws InterruptedException {
+		String wholesellerName = "";
+		String address = "";
+		String city = "";
+		String state = "";
+		String country = "";
+		String pinCode = "";
+		String status = "";
+		String errorMessages;
+		
+		wd.findElement(By.xpath("//a[@class='btn btn-primary btn-lg btn_style btn_style-1']")).click();
+		wd.findElement(By.cssSelector("#email")).sendKeys("dhananjay.singh@datagenius.co.nz");
+		wd.findElement(By.cssSelector("#password")).sendKeys("phonezone@18#$");
+		wd.findElement(By.xpath("//button[@type='submit']")).click();
+
+		Actions actions = new Actions(wd);
+		WebElement menu = wd.findElement(By.xpath("//i[@class='fa fa-user nav_icon']"));
+		actions.moveToElement(menu);
+		actions.click().build().perform();
+		Thread.sleep(2000);
+
+		WebElement subMenu = wd.findElement(By.xpath("//a[contains(text(),'Add Wholeseller')]"));
+		actions.moveToElement(subMenu);
+		actions.click().build().perform();
+
+		Wholeseller wholeseller = new Wholeseller(wd);
+		assertEquals("Wholeseller Listing Add Wholeseller", wholeseller.verifyBreadcrumb());
+		assertEquals("Add Wholeseller", wholeseller.verifyPageTitle());
+		errorMessages = wholeseller.addWholeseller(wholesellerName, address, city, state, country, pinCode, status);
+		Reporter.log("Wholeseller required fields tested successfully. Fields in error are : \n" + errorMessages);
 	}
 }

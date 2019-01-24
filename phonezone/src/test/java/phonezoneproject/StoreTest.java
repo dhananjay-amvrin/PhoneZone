@@ -49,7 +49,7 @@ public class StoreTest extends beforeandafterclassTest {
 		Reporter.log("Store with name: " + storeId + " added successfully.");
 	}
 
-	@Test
+	@Test (dependsOnMethods={"AddStoreTest"})
 	public void EditStoreTest() throws InterruptedException {
 		String storeName = "";
 		String address = "121 West Street";
@@ -100,6 +100,41 @@ public class StoreTest extends beforeandafterclassTest {
 		assertEquals("Store updated successfully.",
 				store.editStore(storeName, address, city, state, country, pinCode, status));
 		Reporter.log("Store with name: " + storeId + " updated successfully.");
+	}
+	
+	
+	@Test
+	public void AddStoreRequiredFieldTest() throws InterruptedException {
+		String storeName = "";
+		String address = "";
+		String city = "";
+		String state = "";
+		String country = "";
+		String pinCode = "";
+		String status = "";
+		String errorMessages;
+		
+		wd.findElement(By.xpath("//a[@class='btn btn-primary btn-lg btn_style btn_style-1']")).click();
+		wd.findElement(By.cssSelector("#email")).sendKeys("dhananjay.singh@datagenius.co.nz");
+		wd.findElement(By.cssSelector("#password")).sendKeys("phonezone@18#$");
+		wd.findElement(By.xpath("//button[@type='submit']")).click();
+
+		Actions actions = new Actions(wd);
+		WebElement menu = wd.findElement(By.xpath("//i[@class='fa fa-user nav_icon']"));
+		actions.moveToElement(menu);
+		actions.click().build().perform();
+		Thread.sleep(2000);
+
+		WebElement subMenu = wd.findElement(By.xpath("//a[contains(text(),'Add Store')]"));
+		actions.moveToElement(subMenu);
+		actions.click().build().perform();
+		Thread.sleep(2000);
+
+		Store store = new Store(wd);
+		assertEquals("Store Listing Add Store", store.verifyBreadcrumb());
+		assertEquals("Add Store", store.verifyPageTitle());
+		errorMessages = store.addStore(storeName, address, city, state, country, pinCode, status);
+		Reporter.log("Store required fields tested successfully. Fields in error are : \n" + errorMessages);
 	}
 
 }

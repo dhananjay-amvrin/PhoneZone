@@ -1,8 +1,11 @@
 package phonezoneproject;
 
+import java.util.List;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
@@ -73,9 +76,9 @@ public class Store {
 
 	private WebElement pinCodeErrorText;
 
-	@FindBy(xpath = "//div[@class='alert alert-success fade in alert-dismissable alert-cust']")
+	@FindBys(@FindBy(xpath = "//div[@class='alert alert-success fade in alert-dismissable alert-cust']"))
 
-	private WebElement successMessage;
+	private List<WebElement> successMessage;
 
 	public Store(WebDriver driver) {
 		this.driver = driver;
@@ -168,7 +171,7 @@ public class Store {
 	}
 
 	private String getsuccessMessage() {
-		return successMessage.getText();
+		return successMessage.get(0).getText();
 	}
 
 	public String verifyBreadcrumb() {
@@ -191,16 +194,21 @@ public class Store {
 		this.selectStatus(status);
 		this.submit();
 
-		if (successMessage.isDisplayed())
+		if (successMessage.size()>0 && successMessage != null)
 			return this.getsuccessMessage();
 		else
 			errorMessages.append(this.getStoreNameError());
-		errorMessages.append(this.getAddressError());
-		errorMessages.append(this.getCityError());
-		errorMessages.append(this.getStateError());
-		errorMessages.append(this.getCountryError());
-		errorMessages.append(this.getPinCodeError());
-		return errorMessages.toString();
+			errorMessages.append(System.getProperty("line.separator"));
+			errorMessages.append(this.getAddressError());
+			errorMessages.append(System.getProperty("line.separator"));
+			errorMessages.append(this.getCityError());
+			errorMessages.append(System.getProperty("line.separator"));
+			errorMessages.append(this.getStateError());
+			errorMessages.append(System.getProperty("line.separator"));
+			errorMessages.append(this.getCountryError());
+			errorMessages.append(System.getProperty("line.separator"));
+			errorMessages.append(this.getPinCodeError());
+			return errorMessages.toString();
 
 	}
 
@@ -216,16 +224,21 @@ public class Store {
 		this.selectStatus(status);
 		this.submit();
 
-		if (successMessage.isDisplayed())
+		if (successMessage.size()>0 && successMessage != null)
 			return this.getsuccessMessage();
 		else
 			errorMessages.append(this.getStoreNameError());
-		errorMessages.append(this.getAddressError());
-		errorMessages.append(this.getCityError());
-		errorMessages.append(this.getStateError());
-		errorMessages.append(this.getCountryError());
-		errorMessages.append(this.getPinCodeError());
-		return errorMessages.toString();
+			errorMessages.append(System.getProperty("line.separator"));
+			errorMessages.append(this.getAddressError());
+			errorMessages.append(System.getProperty("line.separator"));
+			errorMessages.append(this.getCityError());
+			errorMessages.append(System.getProperty("line.separator"));
+			errorMessages.append(this.getStateError());
+			errorMessages.append(System.getProperty("line.separator"));
+			errorMessages.append(this.getCountryError());
+			errorMessages.append(System.getProperty("line.separator"));
+			errorMessages.append(this.getPinCodeError());
+			return errorMessages.toString();
 
 	}
 

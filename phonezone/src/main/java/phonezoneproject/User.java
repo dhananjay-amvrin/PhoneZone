@@ -1,8 +1,11 @@
 package phonezoneproject;
 
+import java.util.List;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -79,9 +82,9 @@ public class User {
 
 	private WebElement userRoleErrorText;
 
-	@FindBy(xpath = "//div[@class='alert alert-success fade in alert-dismissable alert-cust']")
+	@FindBys(@FindBy(xpath = "//div[@class='alert alert-success fade in alert-dismissable alert-cust']"))
 
-	private WebElement successMessage;
+	private List<WebElement> successMessage;
 
 	public User(WebDriver driver) {
 		this.driver = driver;
@@ -179,7 +182,7 @@ public class User {
 	}
 
 	private String getsuccessMessage() {
-		return successMessage.getText();
+		return successMessage.get(0).getText();
 	}
 
 	public String verifyBreadcrumb() {
@@ -208,16 +211,21 @@ public class User {
 		this.selectStatus(status);
 		this.submit();
 
-		if (successMessage.isDisplayed())
+		if (successMessage.size()>0 && successMessage != null)
 			return getsuccessMessage();
 		else
 			errorMessages.append(this.getFirstNameError());
-		errorMessages.append(this.getLastNameError());
-		errorMessages.append(this.getEmailError());
-		errorMessages.append(this.getPasswordError());
-		errorMessages.append(this.getPhoneError());
-		errorMessages.append(this.getUserRoleError());
-		return errorMessages.toString();
+			errorMessages.append(System.getProperty("line.separator"));
+			errorMessages.append(this.getLastNameError());
+			errorMessages.append(System.getProperty("line.separator"));
+			errorMessages.append(this.getEmailError());
+			errorMessages.append(System.getProperty("line.separator"));
+			errorMessages.append(this.getPasswordError());
+			errorMessages.append(System.getProperty("line.separator"));
+			errorMessages.append(this.getPhoneError());
+			errorMessages.append(System.getProperty("line.separator"));
+			errorMessages.append(this.getUserRoleError());
+			return errorMessages.toString();
 	}
 
 	public String editUser(String firstName, String lastName, String email, String phone, String userRole,
@@ -232,15 +240,19 @@ public class User {
 		this.selectStatus(status);
 		this.submit();
 
-		if (successMessage.isDisplayed())
+		if (successMessage.size()>0 && successMessage != null)
 			return getsuccessMessage();
 		else
 			errorMessages.append(this.getFirstNameError());
-		errorMessages.append(this.getLastNameError());
-		errorMessages.append(this.getEmailError());
-		errorMessages.append(this.getPhoneError());
-		errorMessages.append(this.getUserRoleError());
-		return errorMessages.toString();
+			errorMessages.append(System.getProperty("line.separator"));
+			errorMessages.append(this.getLastNameError());
+			errorMessages.append(System.getProperty("line.separator"));
+			errorMessages.append(this.getEmailError());
+			errorMessages.append(System.getProperty("line.separator"));
+			errorMessages.append(this.getPhoneError());
+			errorMessages.append(System.getProperty("line.separator"));
+			errorMessages.append(this.getUserRoleError());
+			return errorMessages.toString();
 	}
 
 	/*
