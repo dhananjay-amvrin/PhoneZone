@@ -14,6 +14,7 @@ public class StoreTest extends beforeandafterclassTest {
 	private String storeId;
 	Random rand = new Random();
 	int randNo = rand.nextInt(900) + 100;
+	public enum Status {Active, Inactive};
 
 	@Test
 	public void AddStoreTest() throws InterruptedException {
@@ -23,7 +24,7 @@ public class StoreTest extends beforeandafterclassTest {
 		String state = "Queensland";
 		String country = "New Zealand";
 		String pinCode = "23423";
-		String status = "Active";
+		
 		wd.findElement(By.xpath("//a[@class='btn btn-primary btn-lg btn_style btn_style-1']")).click();
 		wd.findElement(By.cssSelector("#email")).sendKeys("dhananjay.singh@datagenius.co.nz");
 		wd.findElement(By.cssSelector("#password")).sendKeys("phonezone@18#$");
@@ -44,7 +45,7 @@ public class StoreTest extends beforeandafterclassTest {
 		assertEquals("Store Listing Add Store", store.verifyBreadcrumb());
 		assertEquals("Add Store", store.verifyPageTitle());
 		assertEquals("Store added successfully.",
-				store.addStore(storeName, address, city, state, country, pinCode, status));
+				store.addStore(storeName, address, city, state, country, pinCode, Status.Active.toString()));
 		storeId = storeName;
 		Reporter.log("Store with name: " + storeId + " added successfully.");
 	}
@@ -57,7 +58,8 @@ public class StoreTest extends beforeandafterclassTest {
 		String state = "";
 		String country = "";
 		String pinCode = "";
-		String status = "";
+		boolean found = false;
+		String storeId = "TestStore865";
 
 		wd.findElement(By.xpath("//a[@class='btn btn-primary btn-lg btn_style btn_style-1']")).click();
 		wd.findElement(By.cssSelector("#email")).sendKeys("dhananjay.singh@datagenius.co.nz");
@@ -75,30 +77,40 @@ public class StoreTest extends beforeandafterclassTest {
 		actions.click().build().perform();
 		Thread.sleep(2000);
 
-		if (wd.findElement(By.xpath("//div[@id='default_load']//div[2]//ul[1]//li[3]//a[1]")).isDisplayed()) {
-			wd.findElement(By.xpath("//div[@id='default_load']//div[2]//ul[1]//li[3]//a[1]")).click();
-		}
-		Thread.sleep(2000);
-
-		WebElement webtable = wd.findElement(By.cssSelector("table.table-bordered.table-striped.table-condensed.cf"));
-		List<WebElement> rows = webtable.findElements(By.xpath("//tr"));
-		String rowContent;
-		for (int i = 1; i <= rows.size() - 1; i++) {
-			rowContent = rows.get(i).getText();
-			Thread.sleep(2000);
-			if (rowContent.contains(storeId)) {
-				String elementId = rows.get(i).getAttribute("id");
-				wd.findElement(By.xpath("//tr[@id='" + elementId + "']//i[@class='fa fa-pencil']")).click();
+		List<WebElement> pages = wd.findElements(By.xpath("//div[@id='default_load']//li/a"));
+		for (int k = 0; k <= (pages.size() / 2) - 1; k++) {
+			WebElement webtable = wd.findElement(By.cssSelector("table.table-bordered.table-striped.table-condensed.cf"));
+			List<WebElement> rows = webtable.findElements(By.xpath("//tr"));
+			String rowContent=null;
+			for (int i = 1; i <= rows.size() - 1; i++) {
+				rowContent = rows.get(i).getText();
 				Thread.sleep(2000);
+				if (rowContent.contains(storeId)) {
+					String elementId = rows.get(i).getAttribute("id");
+					wd.findElement(By.xpath("//tr[@id='" + elementId + "']//i[@class='fa fa-pencil']")).click();
+					found = true;
+					Thread.sleep(2000);
+					break;
+				}
+			}
+			if (found != false) {
 				break;
 			}
+			List<WebElement> pagelink = wd.findElements(By.xpath("//div[@id='default_load']//li/a"));
+			if (pages.size()<pagelink.size()) {
+				pagelink.get(k+2).click();
+				Thread.sleep(2000);
+			} else {
+				pagelink.get(k+1).click();
+				Thread.sleep(2000);
+			}
 		}
-
+		
 		Store store = new Store(wd);
 		assertEquals("Store Listing Update Store", store.verifyBreadcrumb());
 		assertEquals("Update Store", store.verifyPageTitle());
 		assertEquals("Store updated successfully.",
-				store.editStore(storeName, address, city, state, country, pinCode, status));
+				store.editStore(storeName, address, city, state, country, pinCode, Status.Active.toString()));
 		Reporter.log("Store with name: " + storeId + " updated successfully.");
 	}
 	
@@ -111,7 +123,6 @@ public class StoreTest extends beforeandafterclassTest {
 		String state = "";
 		String country = "";
 		String pinCode = "";
-		String status = "";
 		String errorMessages;
 		
 		wd.findElement(By.xpath("//a[@class='btn btn-primary btn-lg btn_style btn_style-1']")).click();
@@ -133,7 +144,7 @@ public class StoreTest extends beforeandafterclassTest {
 		Store store = new Store(wd);
 		assertEquals("Store Listing Add Store", store.verifyBreadcrumb());
 		assertEquals("Add Store", store.verifyPageTitle());
-		errorMessages = store.addStore(storeName, address, city, state, country, pinCode, status);
+		errorMessages = store.addStore(storeName, address, city, state, country, pinCode, Status.Active.toString());
 		Reporter.log("Store required fields tested successfully. Fields in error are : \n" + errorMessages);
 	}
 

@@ -14,6 +14,7 @@ public class WholesellerTest extends beforeandafterclassTest {
 	private String wholesellerId;
 	Random rand = new Random();
 	int randNo = rand.nextInt(900) + 100;
+	public enum Status {Active, Inactive};
 
 	@Test
 	public void AddWholesellerTest() throws InterruptedException {
@@ -23,7 +24,6 @@ public class WholesellerTest extends beforeandafterclassTest {
 		String state = "North Island";
 		String country = "New Zealand";
 		String pinCode = "23456";
-		String status = "Active";
 
 		wd.findElement(By.xpath("//a[@class='btn btn-primary btn-lg btn_style btn_style-1']")).click();
 		wd.findElement(By.cssSelector("#email")).sendKeys("dhananjay.singh@datagenius.co.nz");
@@ -39,12 +39,13 @@ public class WholesellerTest extends beforeandafterclassTest {
 		WebElement subMenu = wd.findElement(By.xpath("//a[contains(text(),'Add Wholeseller')]"));
 		actions.moveToElement(subMenu);
 		actions.click().build().perform();
+		Thread.sleep(2000);
 
 		Wholeseller wholeseller = new Wholeseller(wd);
 		assertEquals("Wholeseller Listing Add Wholeseller", wholeseller.verifyBreadcrumb());
 		assertEquals("Add Wholeseller", wholeseller.verifyPageTitle());
 		assertEquals("Wholeseller added successfully.",
-				wholeseller.addWholeseller(wholesellerName, address, city, state, country, pinCode, status));
+				wholeseller.addWholeseller(wholesellerName, address, city, state, country, pinCode, Status.Active.toString()));
 		wholesellerId = wholesellerName;
 		Reporter.log("Wholeseller with name: " + wholesellerId + " added successfully.");
 	}
@@ -57,8 +58,8 @@ public class WholesellerTest extends beforeandafterclassTest {
 		String state = "";
 		String country = "";
 		String pinCode = "";
-		String status = "";
-
+		boolean found = false;
+		
 		wd.findElement(By.xpath("//a[@class='btn btn-primary btn-lg btn_style btn_style-1']")).click();
 		wd.findElement(By.cssSelector("#email")).sendKeys("dhananjay.singh@datagenius.co.nz");
 		wd.findElement(By.cssSelector("#password")).sendKeys("phonezone@18#$");
@@ -75,32 +76,40 @@ public class WholesellerTest extends beforeandafterclassTest {
 		actions.click().build().perform();
 		Thread.sleep(2000);
 
-		/*
-		 * if (wd.findElement(By.xpath(
-		 * "//div[@id='default_load']//div[2]//ul[1]//li[3]//a[1]")).isDisplayed()) {
-		 * wd.findElement(By.xpath(
-		 * "//div[@id='default_load']//div[2]//ul[1]//li[3]//a[1]")).click(); }
-		 */
-
-		WebElement webtable = wd.findElement(By.cssSelector("table.table-bordered.table-striped.table-condensed.cf"));
-		List<WebElement> rows = webtable.findElements(By.xpath("//tr"));
-		String rowContent;
-		for (int i = 1; i <= rows.size() - 1; i++) {
-			rowContent = rows.get(i).getText();
-			Thread.sleep(2000);
-			if (rowContent.contains(wholesellerId)) {
-				String elementId = rows.get(i).getAttribute("id");
-				wd.findElement(By.xpath("//tr[@id='" + elementId + "']//i[@class='fa fa-pencil']")).click();
+		List<WebElement> pages = wd.findElements(By.xpath("//div[@id='default_load']//li/a"));
+		for (int k = 0; k <= (pages.size() / 2) - 1; k++) {
+			WebElement webtable = wd.findElement(By.cssSelector("table.table-bordered.table-striped.table-condensed.cf"));
+			List<WebElement> rows = webtable.findElements(By.xpath("//tr"));
+			String rowContent=null;
+			for (int i = 1; i <= rows.size() - 1; i++) {
+				rowContent = rows.get(i).getText();
 				Thread.sleep(2000);
+				if (rowContent.contains(wholesellerId)) {
+					String elementId = rows.get(i).getAttribute("id");
+					wd.findElement(By.xpath("//tr[@id='" + elementId + "']//i[@class='fa fa-pencil']")).click();
+					Thread.sleep(2000);
+					found = true;
+					break;
+				}
+			}
+			if (found != false) {
 				break;
 			}
-		}
+			List<WebElement> pagelink = wd.findElements(By.xpath("//div[@id='default_load']//li/a"));
+			if (pages.size()<pagelink.size()) {
+				pagelink.get(k+2).click();
+				Thread.sleep(2000);
+			} else {
+				pagelink.get(k+1).click();
+				Thread.sleep(2000);
+			}
+		}		
 
 		Wholeseller wholeseller = new Wholeseller(wd);
 		assertEquals("Wholeseller Listing Update Wholeseller", wholeseller.verifyBreadcrumb());
 		assertEquals("Update Wholeseller", wholeseller.verifyPageTitle());
 		assertEquals("Wholeseller updated successfully.",
-				wholeseller.editWholeseller(wholesellerName, address, city, state, country, pinCode, status));
+				wholeseller.editWholeseller(wholesellerName, address, city, state, country, pinCode, Status.Active.toString()));
 		Reporter.log("Wholeseller with name: " + wholesellerId + " updated successfully.");
 	}
 	
@@ -113,7 +122,6 @@ public class WholesellerTest extends beforeandafterclassTest {
 		String state = "";
 		String country = "";
 		String pinCode = "";
-		String status = "";
 		String errorMessages;
 		
 		wd.findElement(By.xpath("//a[@class='btn btn-primary btn-lg btn_style btn_style-1']")).click();
@@ -134,7 +142,7 @@ public class WholesellerTest extends beforeandafterclassTest {
 		Wholeseller wholeseller = new Wholeseller(wd);
 		assertEquals("Wholeseller Listing Add Wholeseller", wholeseller.verifyBreadcrumb());
 		assertEquals("Add Wholeseller", wholeseller.verifyPageTitle());
-		errorMessages = wholeseller.addWholeseller(wholesellerName, address, city, state, country, pinCode, status);
+		errorMessages = wholeseller.addWholeseller(wholesellerName, address, city, state, country, pinCode, Status.Active.toString());
 		Reporter.log("Wholeseller required fields tested successfully. Fields in error are : \n" + errorMessages);
 	}
 }

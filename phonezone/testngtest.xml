@@ -10,6 +10,8 @@
 	<test name="Test">
 		<classes>
 			<class name="phonezoneproject.UserTest" />
+			<class name="phonezoneproject.StoreTest" />
+			<class name="phonezoneproject.WholesellerTest" />
 		</classes>
 	</test> <!-- Test -->
 
